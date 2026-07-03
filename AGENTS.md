@@ -82,6 +82,8 @@ No source modules exist yet — the repo is a Gradle scaffold. When adding modul
 - **Small, reviewable PRs** — one design unit per PR (e.g. one PR for result types, one for the
   HTTP engine abstraction), each including its own tests. PR descriptions explain the *why*, not
   just the *what*.
+- **PRs are squash-merged.** The PR title becomes the commit on `main`, so it must follow
+  Conventional Commits — CI validates this on every PR (`.github/workflows/pr-title.yml`).
 
 ## Releases, versioning & publishing
 
@@ -106,19 +108,3 @@ No source modules exist yet — the repo is a Gradle scaffold. When adding modul
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
   JaCoCo, which miscounts inline functions and coroutine bodies). Do not add it before the first
   module lands; coverage config with no code to measure is dead config.
-
-## Skills
-
-Relevant skills available in this environment and when to use them:
-
-- `superpowers:test-driven-development` — default workflow for all library code; every design unit
-  lands with its tests.
-- `superpowers:writing-plans` / `superpowers:executing-plans` — for multi-PR design units before
-  touching code.
-- `superpowers:verification-before-completion` — before declaring any task done (pairs with the
-  verification commands above).
-- `superpowers:requesting-code-review` / `superpowers:finishing-a-development-branch` — when
-  wrapping up a feature branch into a PR.
-- `superpowers:systematic-debugging` — for non-obvious test failures or build issues.
-- Android skills (`android-cli`, `testing-setup`, etc.) apply **only** to future Android-facing
-  sample/consumer modules, not to this pure-JVM library.
