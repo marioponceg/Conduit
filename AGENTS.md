@@ -40,10 +40,10 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 ## Module structure
 
-- `conduit-core` — pure Kotlin/JVM module that will hold the public API, result types, and
-  interceptor pipeline. Currently an empty compilable skeleton with the library tooling applied
-  (explicit API mode, Kover, Binary Compatibility Validator, Dokka); the first code lands in the
-  result-types PR.
+- `conduit-core` — pure Kotlin/JVM module holding the public API: currently the sealed
+  `ConduitResult` type (package `io.github.marioponceg.conduit.result`); the interceptor pipeline
+  and engine interface land in later PRs. Library tooling applied: explicit API mode, Kover,
+  Binary Compatibility Validator, Dokka.
 - The OkHttp engine goes either inside core or in a separate `conduit-engine-okhttp` if the
   dependency boundary warrants it (raise this when it comes up).
 - Wire each new module into `settings.gradle.kts` (`include(...)`).
@@ -67,8 +67,7 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 - Detekt config: `config/detekt/detekt.yml` (builds upon defaults, `maxIssues: 0`).
 - Intentional public API changes: run `./gradlew apiDump` and commit the updated `api/*.api` files.
-- Coverage: `./gradlew koverVerify` (no minimum-coverage rule yet — it lands with the first code in
-  the result-types PR).
+- Coverage: `./gradlew koverVerify` enforces a **90% minimum line coverage** on `conduit-core`.
 - A task is not done until these commands pass locally; CI runs the same commands on every PR.
 
 ## Commit & branching conventions
@@ -108,8 +107,8 @@ tooling, one `feat:` PR for the first code:
 | When | What |
 |---|---|
 | Already in place | CI (build + test + detekt), AGENTS.md, version catalog |
-| `build:` conduit-core scaffold PR (this split's first half — done) | `conduit-core` empty module wired into settings; Kover (`koverVerify` in CI, no coverage rule yet), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; scaffold `android-application` plugin removed |
-| `feat:` result-types PR (second half — next) | Sealed result types with their tests; Kover minimum-coverage rule now that there is code to measure |
+| `build:` conduit-core scaffold PR (first half — done, #2) | `conduit-core` empty module wired into settings; Kover (`koverVerify` in CI), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; scaffold `android-application` plugin removed |
+| `feat:` result-types PR (second half — done) | Sealed `ConduitResult` type with its tests; Kover 90% minimum line-coverage rule now that there is code to measure |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
