@@ -23,5 +23,8 @@ public class Headers private constructor(
     public companion object {
         /** Creates headers from name-value [pairs], keeping their order. */
         public fun of(vararg pairs: Pair<String, String>): Headers = Headers(pairs.toList())
+
+        /** Creates headers from a list of name-value [pairs], keeping their order. */
+        public fun of(pairs: List<Pair<String, String>>): Headers = Headers(pairs.toList())
     }
 }

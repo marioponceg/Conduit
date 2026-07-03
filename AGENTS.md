@@ -46,9 +46,11 @@ Any design decision **not** listed above must be raised with the maintainer befo
   PRs. Its only dependency is `kotlinx-coroutines-core` (KMP-friendly, required by the
   coroutines-first design). Library tooling applied: explicit API mode, Kover, Binary
   Compatibility Validator, Dokka.
-- **Settled (2026-07-04): the OkHttp engine lives in a separate `conduit-engine-okhttp` module**,
-  so core stays physically dependency-free and the engine seam is the real KMP boundary. The
-  engine module exposes core as an `api` dependency so consumers can declare a single artifact.
+- `conduit-engine-okhttp` — the default [ConduitEngine]: OkHttp (stable 4.x line) bridged into a
+  suspend call over `Call.enqueue` with structured cancellation. Exposes core as an `api`
+  dependency so consumers can declare this single artifact. Settled 2026-07-04: the engine lives
+  outside core so core stays physically dependency-free and the engine seam is the real KMP
+  boundary.
 - **Engine contract is raw by design**: engines return the `HttpResponse` for any status code and
   throw only `IOException` / `CancellationException`; the mapping to `ConduitResult` happens once,
   in core — never inside an engine.
@@ -113,8 +115,8 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models |
-| Next PRs (one design unit each) | `conduit-engine-okhttp` module (coroutine bridge over `Call.enqueue`); interceptor pipeline; configuration DSL |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` |
+| Next PRs (one design unit each) | Interceptor pipeline; configuration DSL; error mapping into `ConduitResult` (with whichever of the two it fits best) |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw

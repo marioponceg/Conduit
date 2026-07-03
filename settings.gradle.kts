@@ -25,3 +25,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Conduit"
 include(":conduit-core")
+include(":conduit-engine-okhttp")

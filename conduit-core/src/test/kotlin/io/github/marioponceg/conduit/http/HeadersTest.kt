@@ -25,4 +25,11 @@ class HeadersTest {
         assertEquals("a=1", headers["Set-Cookie"])
         assertEquals(setOf("Set-Cookie", "Accept"), headers.names())
     }
+
+    @Test
+    fun `of accepts a list of pairs preserving order`() {
+        val headers = Headers.of(listOf("Set-Cookie" to "a=1", "Set-Cookie" to "b=2"))
+
+        assertEquals(listOf("a=1", "b=2"), headers.values("Set-Cookie"))
+    }
 }

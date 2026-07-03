@@ -1,0 +1,7 @@
+public final class io/github/marioponceg/conduit/engine/okhttp/OkHttpEngine : io/github/marioponceg/conduit/engine/ConduitEngine {
+	public fun <init> ()V
+	public fun <init> (Lokhttp3/OkHttpClient;)V
+	public synthetic fun <init> (Lokhttp3/OkHttpClient;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
