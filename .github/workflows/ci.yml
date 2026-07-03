@@ -39,7 +39,8 @@ jobs:
       - name: Static analysis (detekt)
         run: ./gradlew detekt
 
-      # TODO: enable once the Binary Compatibility Validator plugin is applied
-      # alongside the first library module (see AGENTS.md).
-      # - name: API compatibility check
-      #   run: ./gradlew apiCheck
+      - name: Coverage (Kover)
+        run: ./gradlew koverXmlReport koverVerify
+
+      - name: API compatibility check
+        run: ./gradlew apiCheck
