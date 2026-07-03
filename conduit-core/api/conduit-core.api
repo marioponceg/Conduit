@@ -1,0 +1,57 @@
+public abstract interface class io/github/marioponceg/conduit/result/ConduitResult {
+}
+
+public abstract interface class io/github/marioponceg/conduit/result/ConduitResult$Failure : io/github/marioponceg/conduit/result/ConduitResult {
+}
+
+public final class io/github/marioponceg/conduit/result/ConduitResult$Failure$Http : io/github/marioponceg/conduit/result/ConduitResult$Failure {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Http;
+	public static synthetic fun copy$default (Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Http;ILjava/lang/String;ILjava/lang/Object;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Http;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getCode ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/result/ConduitResult$Failure$Network : io/github/marioponceg/conduit/result/ConduitResult$Failure {
+	public fun <init> (Ljava/io/IOException;)V
+	public final fun component1 ()Ljava/io/IOException;
+	public final fun copy (Ljava/io/IOException;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Network;
+	public static synthetic fun copy$default (Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Network;Ljava/io/IOException;ILjava/lang/Object;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Network;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/io/IOException;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/result/ConduitResult$Failure$Serialization : io/github/marioponceg/conduit/result/ConduitResult$Failure {
+	public fun <init> (Ljava/lang/Throwable;)V
+	public final fun component1 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/Throwable;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Serialization;
+	public static synthetic fun copy$default (Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Serialization;Ljava/lang/Throwable;ILjava/lang/Object;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure$Serialization;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/result/ConduitResult$Success : io/github/marioponceg/conduit/result/ConduitResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/marioponceg/conduit/result/ConduitResult$Success;
+	public static synthetic fun copy$default (Lio/github/marioponceg/conduit/result/ConduitResult$Success;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/marioponceg/conduit/result/ConduitResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/result/ConduitResultKt {
+	public static final fun failureOrNull (Lio/github/marioponceg/conduit/result/ConduitResult;)Lio/github/marioponceg/conduit/result/ConduitResult$Failure;
+	public static final fun getOrNull (Lio/github/marioponceg/conduit/result/ConduitResult;)Ljava/lang/Object;
+}
+

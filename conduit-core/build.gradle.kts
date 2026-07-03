@@ -15,6 +15,21 @@ detekt {
     config.setFrom(rootProject.file("config/detekt/detekt.yml"))
 }
 
+kover {
+    reports {
+        verify {
+            rule {
+                minBound(90)
+            }
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
     detektPlugins(libs.detekt.formatting)
+    testImplementation(libs.kotlin.test.junit5)
 }
