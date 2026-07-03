@@ -11,6 +11,7 @@ public final class io/github/marioponceg/conduit/http/Headers {
 }
 
 public final class io/github/marioponceg/conduit/http/Headers$Companion {
+	public final fun of (Ljava/util/List;)Lio/github/marioponceg/conduit/http/Headers;
 	public final fun of ([Lkotlin/Pair;)Lio/github/marioponceg/conduit/http/Headers;
 }
 
