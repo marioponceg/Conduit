@@ -30,6 +30,8 @@ tasks.test {
 }
 
 dependencies {
+    api(libs.kotlinx.coroutines.core)
     detektPlugins(libs.detekt.formatting)
     testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
