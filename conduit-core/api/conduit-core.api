@@ -1,3 +1,62 @@
+public abstract interface class io/github/marioponceg/conduit/engine/ConduitEngine {
+	public abstract fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/marioponceg/conduit/http/Headers {
+	public static final field Companion Lio/github/marioponceg/conduit/http/Headers$Companion;
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun get (Ljava/lang/String;)Ljava/lang/String;
+	public final fun names ()Ljava/util/Set;
+	public final fun values (Ljava/lang/String;)Ljava/util/List;
+}
+
+public final class io/github/marioponceg/conduit/http/Headers$Companion {
+	public final fun of ([Lkotlin/Pair;)Lio/github/marioponceg/conduit/http/Headers;
+}
+
+public final class io/github/marioponceg/conduit/http/HttpMethod {
+	public static final field Companion Lio/github/marioponceg/conduit/http/HttpMethod$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/marioponceg/conduit/http/HttpMethod;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/http/HttpMethod$Companion {
+	public final fun getDELETE-iu2Y2zA ()Ljava/lang/String;
+	public final fun getGET-iu2Y2zA ()Ljava/lang/String;
+	public final fun getHEAD-iu2Y2zA ()Ljava/lang/String;
+	public final fun getOPTIONS-iu2Y2zA ()Ljava/lang/String;
+	public final fun getPATCH-iu2Y2zA ()Ljava/lang/String;
+	public final fun getPOST-iu2Y2zA ()Ljava/lang/String;
+	public final fun getPUT-iu2Y2zA ()Ljava/lang/String;
+	public final fun invoke-EBAETo0 (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/http/HttpRequest {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/marioponceg/conduit/http/Headers;[BILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/marioponceg/conduit/http/Headers;[BLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBody ()[B
+	public final fun getHeaders ()Lio/github/marioponceg/conduit/http/Headers;
+	public final fun getMethod-iu2Y2zA ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+}
+
+public final class io/github/marioponceg/conduit/http/HttpResponse {
+	public fun <init> (ILio/github/marioponceg/conduit/http/Headers;[B)V
+	public synthetic fun <init> (ILio/github/marioponceg/conduit/http/Headers;[BILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBody ()[B
+	public final fun getCode ()I
+	public final fun getHeaders ()Lio/github/marioponceg/conduit/http/Headers;
+	public final fun isSuccessful ()Z
+}
+
 public abstract interface class io/github/marioponceg/conduit/result/ConduitResult {
 }
 

@@ -40,12 +40,18 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 ## Module structure
 
-- `conduit-core` — pure Kotlin/JVM module holding the public API: currently the sealed
-  `ConduitResult` type (package `io.github.marioponceg.conduit.result`); the interceptor pipeline
-  and engine interface land in later PRs. Library tooling applied: explicit API mode, Kover,
-  Binary Compatibility Validator, Dokka.
-- The OkHttp engine goes either inside core or in a separate `conduit-engine-okhttp` if the
-  dependency boundary warrants it (raise this when it comes up).
+- `conduit-core` — pure Kotlin/JVM module holding the public API: the sealed `ConduitResult`
+  type (`…conduit.result`), the engine-agnostic HTTP models (`…conduit.http`), and the
+  `ConduitEngine` interface (`…conduit.engine`); the interceptor pipeline and DSL land in later
+  PRs. Its only dependency is `kotlinx-coroutines-core` (KMP-friendly, required by the
+  coroutines-first design). Library tooling applied: explicit API mode, Kover, Binary
+  Compatibility Validator, Dokka.
+- **Settled (2026-07-04): the OkHttp engine lives in a separate `conduit-engine-okhttp` module**,
+  so core stays physically dependency-free and the engine seam is the real KMP boundary. The
+  engine module exposes core as an `api` dependency so consumers can declare a single artifact.
+- **Engine contract is raw by design**: engines return the `HttpResponse` for any status code and
+  throw only `IOException` / `CancellationException`; the mapping to `ConduitResult` happens once,
+  in core — never inside an engine.
 - Wire each new module into `settings.gradle.kts` (`include(...)`).
 - As modules multiply, move shared build logic into convention plugins (`build-logic/`) rather than
   duplicating configuration; apply detekt through them.
@@ -101,16 +107,13 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 ## Tooling roadmap — when each piece gets wired
 
-The first-library-module work was split into two PRs — one `build:` PR for the module skeleton and
-tooling, one `feat:` PR for the first code:
-
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt), AGENTS.md, version catalog |
-| `build:` conduit-core scaffold PR (first half — done, #2) | `conduit-core` empty module wired into settings; Kover (`koverVerify` in CI), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; scaffold `android-application` plugin removed |
-| `feat:` result-types PR (second half — done) | Sealed `ConduitResult` type with its tests; Kover 90% minimum line-coverage rule now that there is code to measure |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models |
+| Next PRs (one design unit each) | `conduit-engine-okhttp` module (coroutine bridge over `Call.enqueue`); interceptor pipeline; configuration DSL |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
-  JaCoCo, which miscounts inline functions and coroutine bodies). The minimum-coverage rule is
-  deliberately deferred to the result-types PR; a threshold with no code to measure is dead config.
+  JaCoCo, which miscounts inline functions and coroutine bodies). CI uploads the Kover XML report
+  to **Codecov** (badge in README, PR comments with total + diff coverage; token in the
+  `CODECOV_TOKEN` repo secret).
