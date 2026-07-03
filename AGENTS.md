@@ -76,9 +76,36 @@ No source modules exist yet — the repo is a Gradle scaffold. When adding modul
   `refactor:`, `ci:`, `build:` …
 - **Trunk-based workflow**: `main` is protected. All work happens on short-lived feature branches
   (`feature/<topic>`), merged via PR. No direct commits to `main` except trivial admin files.
+- **No `develop` or standing release branches.** `main` is always green and always releasable;
+  releases are cut from `main` via tags (see below). A `release/x.y` branch is created only if a
+  fix ever needs backporting to an older published version — never pre-emptively.
 - **Small, reviewable PRs** — one design unit per PR (e.g. one PR for result types, one for the
   HTTP engine abstraction), each including its own tests. PR descriptions explain the *why*, not
   just the *what*.
+
+## Releases, versioning & publishing
+
+- **Versioning**: SemVer. Releases are annotated tags on `main` (`vX.Y.Z`); a tag push will
+  trigger the release workflow (to be added before `v0.1.0`).
+- **Publishing target: Maven Central** under the `io.github.marioponceg` namespace
+  (e.g. `io.github.marioponceg:conduit-core`), using the `com.vanniktech.maven.publish` plugin
+  and the Central Portal, with GPG-signed artifacts. Implement the publishing setup and the
+  tag-triggered release workflow when a minimal publishable API exists — not before.
+- **Consumption during development** (design-system library, sample app): via Gradle composite
+  builds (`includeBuild`) or `mavenLocal` — no published artifact is required to start consuming
+  Conduit from sibling repos.
+
+## Tooling roadmap — when each piece gets wired
+
+| When | What |
+|---|---|
+| Already in place | CI (build + test + detekt), AGENTS.md, version catalog |
+| First library module PR | Kover (test coverage + CI verification step), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; remove scaffold `android-application` plugin |
+| Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
+
+- **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
+  JaCoCo, which miscounts inline functions and coroutine bodies). Do not add it before the first
+  module lands; coverage config with no code to measure is dead config.
 
 ## Skills
 
