@@ -75,8 +75,10 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 - **Conventional Commits** for every commit: `feat:`, `fix:`, `chore:`, `docs:`, `test:`,
   `refactor:`, `ci:`, `build:` …
-- **Trunk-based workflow**: `main` is protected. All work happens on short-lived feature branches
-  (`feature/<topic>`), merged via PR. No direct commits to `main` except trivial admin files.
+- **Trunk-based workflow**: `main` is protected by a repository ruleset — PR required (no direct
+  pushes, no admin bypass), force-pushes and deletion blocked, CI and PR-title checks must pass.
+  All work, however trivial, happens on short-lived feature branches (`feature/<topic>`) merged
+  via PR.
 - **No `develop` or standing release branches.** `main` is always green and always releasable;
   releases are cut from `main` via tags (see below). A `release/x.y` branch is created only if a
   fix ever needs backporting to an older published version — never pre-emptively.
