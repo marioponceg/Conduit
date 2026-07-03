@@ -1,9 +1,13 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.kover) apply false
-    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.binary.compatibility.validator)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.dokka)
+}
+
+kotlin {
+    explicitApi()
+    jvmToolchain(21)
 }
 
 detekt {

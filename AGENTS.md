@@ -40,16 +40,15 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 ## Module structure
 
-No source modules exist yet — the repo is a Gradle scaffold. When adding modules:
-
-- Wire each module into `settings.gradle.kts` (`include(...)`).
-- Planned shape: a `conduit-core` pure-JVM module holding the public API, result types, and
-  interceptor pipeline; the OkHttp engine either inside core or as `conduit-engine-okhttp` if the
+- `conduit-core` — pure Kotlin/JVM module that will hold the public API, result types, and
+  interceptor pipeline. Currently an empty compilable skeleton with the library tooling applied
+  (explicit API mode, Kover, Binary Compatibility Validator, Dokka); the first code lands in the
+  result-types PR.
+- The OkHttp engine goes either inside core or in a separate `conduit-engine-okhttp` if the
   dependency boundary warrants it (raise this when it comes up).
+- Wire each new module into `settings.gradle.kts` (`include(...)`).
 - As modules multiply, move shared build logic into convention plugins (`build-logic/`) rather than
   duplicating configuration; apply detekt through them.
-- The root `build.gradle.kts` still declares the AGP `android-application` plugin from the original
-  scaffold; remove it when the first real (pure Kotlin) module replaces the scaffold assumptions.
 
 ## Build & toolchain
 
@@ -61,14 +60,16 @@ No source modules exist yet — the repo is a Gradle scaffold. When adding modul
 ## Verification — run before considering any task done
 
 ```sh
-./gradlew build    # compiles everything and runs all unit tests
-./gradlew detekt   # static analysis + formatting (ktlint rules via detekt-formatting)
+./gradlew build      # compiles everything and runs all unit tests
+./gradlew detekt     # static analysis + formatting (ktlint rules via detekt-formatting)
+./gradlew apiCheck   # public API surface matches the committed api/*.api dumps
 ```
 
 - Detekt config: `config/detekt/detekt.yml` (builds upon defaults, `maxIssues: 0`).
-- TODO once Binary Compatibility Validator is applied: `./gradlew apiCheck` (and `apiDump` to
-  intentionally update the tracked API surface).
-- A task is not done until both commands pass locally; CI runs the same commands on every PR.
+- Intentional public API changes: run `./gradlew apiDump` and commit the updated `api/*.api` files.
+- Coverage: `./gradlew koverVerify` (no minimum-coverage rule yet — it lands with the first code in
+  the result-types PR).
+- A task is not done until these commands pass locally; CI runs the same commands on every PR.
 
 ## Commit & branching conventions
 
@@ -99,12 +100,16 @@ No source modules exist yet — the repo is a Gradle scaffold. When adding modul
 
 ## Tooling roadmap — when each piece gets wired
 
+The first-library-module work was split into two PRs — one `build:` PR for the module skeleton and
+tooling, one `feat:` PR for the first code:
+
 | When | What |
 |---|---|
 | Already in place | CI (build + test + detekt), AGENTS.md, version catalog |
-| First library module PR | Kover (test coverage + CI verification step), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; remove scaffold `android-application` plugin |
+| `build:` conduit-core scaffold PR (this split's first half — done) | `conduit-core` empty module wired into settings; Kover (`koverVerify` in CI, no coverage rule yet), Kotlin explicit API mode, Binary Compatibility Validator (`apiCheck` in CI), Dokka; scaffold `android-application` plugin removed |
+| `feat:` result-types PR (second half — next) | Sealed result types with their tests; Kover minimum-coverage rule now that there is code to measure |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
-  JaCoCo, which miscounts inline functions and coroutine bodies). Do not add it before the first
-  module lands; coverage config with no code to measure is dead config.
+  JaCoCo, which miscounts inline functions and coroutine bodies). The minimum-coverage rule is
+  deliberately deferred to the result-types PR; a threshold with no code to measure is dead config.
