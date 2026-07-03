@@ -53,8 +53,12 @@ Any design decision **not** listed above must be raised with the maintainer befo
   throw only `IOException` / `CancellationException`; the mapping to `ConduitResult` happens once,
   in core — never inside an engine.
 - Wire each new module into `settings.gradle.kts` (`include(...)`).
-- As modules multiply, move shared build logic into convention plugins (`build-logic/`) rather than
-  duplicating configuration; apply detekt through them.
+- Shared build logic lives in the `build-logic/` included build: library modules apply the
+  `conduit.library` convention plugin (Kotlin/JVM + explicit API, detekt with formatting, Kover
+  with the 90% rule, Dokka, JUnit 5 platform) instead of repeating configuration. Root-level
+  plugins that must see the Kotlin plugin classes (e.g. Binary Compatibility Validator) require
+  the plugins to stay loaded `apply false` in the root build so everything shares one
+  classloader.
 
 ## Build & toolchain
 
