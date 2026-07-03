@@ -42,5 +42,12 @@ jobs:
       - name: Coverage (Kover)
         run: ./gradlew koverXmlReport koverVerify
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: conduit-core/build/reports/kover/report.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+
       - name: API compatibility check
         run: ./gradlew apiCheck
