@@ -58,6 +58,20 @@ public final class io/github/marioponceg/conduit/http/HttpResponse {
 	public final fun isSuccessful ()Z
 }
 
+public abstract interface class io/github/marioponceg/conduit/interceptor/ConduitInterceptor {
+	public abstract fun intercept (Lio/github/marioponceg/conduit/interceptor/ConduitInterceptor$Chain;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/marioponceg/conduit/interceptor/ConduitInterceptor$Chain {
+	public abstract fun getRequest ()Lio/github/marioponceg/conduit/http/HttpRequest;
+	public abstract fun proceed (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/marioponceg/conduit/interceptor/InterceptorPipeline : io/github/marioponceg/conduit/engine/ConduitEngine {
+	public fun <init> (Ljava/util/List;Lio/github/marioponceg/conduit/engine/ConduitEngine;)V
+	public fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public abstract interface class io/github/marioponceg/conduit/result/ConduitResult {
 }
 
