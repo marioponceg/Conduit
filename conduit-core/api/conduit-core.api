@@ -103,6 +103,17 @@ public final class io/github/marioponceg/conduit/interceptor/InterceptorPipeline
 	public fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/marioponceg/conduit/interceptor/RetryInterceptor : io/github/marioponceg/conduit/interceptor/ConduitInterceptor {
+	public static final field Companion Lio/github/marioponceg/conduit/interceptor/RetryInterceptor$Companion;
+	public synthetic fun <init> (ILjava/util/Set;ZJJLkotlin/random/Random;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/util/Set;ZJJLkotlin/random/Random;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun intercept (Lio/github/marioponceg/conduit/interceptor/ConduitInterceptor$Chain;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/marioponceg/conduit/interceptor/RetryInterceptor$Companion {
+	public final fun getDEFAULT_RETRYABLE_STATUS_CODES ()Ljava/util/Set;
+}
+
 public abstract interface class io/github/marioponceg/conduit/result/ConduitResult {
 }
 

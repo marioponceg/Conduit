@@ -44,7 +44,9 @@ Any design decision **not** listed above must be raised with the maintainer befo
   type (`…conduit.result`), the engine-agnostic HTTP models (`…conduit.http`), the
   `ConduitEngine` interface (`…conduit.engine`), and the interceptor pipeline
   (`…conduit.interceptor`: suspend chain-of-responsibility at the raw engine level; the pipeline
-  is itself a `ConduitEngine` decorator, so it composes), and the entry point (`conduit { }` DSL
+  is itself a `ConduitEngine` decorator, so it composes; includes `RetryInterceptor` —
+  exponential backoff with jitter via suspending `delay`, transient statuses + `IOException`
+  only, non-idempotent methods excluded unless opted in), and the entry point (`conduit { }` DSL
   building a `ConduitClient` that resolves `baseUrl`, runs the pipeline, and maps the raw outcome
   to `ConduitResult` — the single place where that mapping happens; `CancellationException`
   always propagates, never becomes a `Failure`), plus the `BodyConverter` seam
@@ -126,8 +128,8 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping (#9), `BodyConverter` seam + `conduit-serialization-kotlinx` |
-| Next PRs (one design unit each) | Retry policies as interceptors; typed verb sugar (`get<T>` / `post<T>`) if it earns its keep |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping (#9), `BodyConverter` seam + `conduit-serialization-kotlinx` (#10), `RetryInterceptor` |
+| Next PRs (one design unit each) | Typed verb sugar (`get<T>` / `post<T>`) if it earns its keep; README usage docs |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
