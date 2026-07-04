@@ -82,14 +82,8 @@ mutate, observe, short-circuit or retry, all with one pattern:
 
 ```kotlin
 val auth = ConduitInterceptor { chain ->
-    val request = chain.request
     chain.proceed(
-        HttpRequest(
-            url = request.url,
-            method = request.method,
-            headers = request.headers + ("Authorization" to "Bearer $token"),
-            body = request.body,
-        ),
+        chain.request.copy(headers = chain.request.headers + ("Authorization" to "Bearer $token")),
     )
 }
 ```

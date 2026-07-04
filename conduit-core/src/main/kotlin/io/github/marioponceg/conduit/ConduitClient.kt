@@ -43,10 +43,5 @@ public class ConduitClient internal constructor(
 private fun HttpRequest.resolvedAgainst(baseUrl: String?): HttpRequest {
     val isAbsolute = url.startsWith("http://") || url.startsWith("https://")
     if (baseUrl == null || isAbsolute) return this
-    return HttpRequest(
-        url = baseUrl.trimEnd('/') + "/" + url.trimStart('/'),
-        method = method,
-        headers = headers,
-        body = body,
-    )
+    return copy(url = baseUrl.trimEnd('/') + "/" + url.trimStart('/'))
 }
