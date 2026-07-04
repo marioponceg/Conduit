@@ -12,4 +12,17 @@ public class HttpRequest(
     public val method: HttpMethod = HttpMethod.GET,
     public val headers: Headers = Headers.of(),
     public val body: ByteArray? = null,
-)
+) {
+
+    /**
+     * Returns a copy with the given fields replaced — the data-class idiom, hand-written
+     * because this class avoids generated equality. The typical interceptor move:
+     * `chain.proceed(chain.request.copy(headers = chain.request.headers + auth))`.
+     */
+    public fun copy(
+        url: String = this.url,
+        method: HttpMethod = this.method,
+        headers: Headers = this.headers,
+        body: ByteArray? = this.body,
+    ): HttpRequest = HttpRequest(url = url, method = method, headers = headers, body = body)
+}

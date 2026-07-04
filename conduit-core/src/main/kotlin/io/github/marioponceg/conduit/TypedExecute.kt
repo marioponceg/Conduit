@@ -49,10 +49,7 @@ internal suspend fun <T> ConduitClient.executeTypedWithBody(
     } else {
         request.headers
     }
-    return executeTyped(
-        HttpRequest(url = request.url, method = request.method, headers = headers, body = encoded),
-        responseType,
-    )
+    return executeTyped(request.copy(headers = headers, body = encoded), responseType)
 }
 
 @PublishedApi
