@@ -1,3 +1,19 @@
+public final class io/github/marioponceg/conduit/ConduitBuilder {
+	public final fun getBaseUrl ()Ljava/lang/String;
+	public final fun getEngine ()Lio/github/marioponceg/conduit/engine/ConduitEngine;
+	public final fun getInterceptors ()Ljava/util/List;
+	public final fun setBaseUrl (Ljava/lang/String;)V
+	public final fun setEngine (Lio/github/marioponceg/conduit/engine/ConduitEngine;)V
+}
+
+public final class io/github/marioponceg/conduit/ConduitClient {
+	public final fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/marioponceg/conduit/ConduitKt {
+	public static final fun conduit (Lkotlin/jvm/functions/Function1;)Lio/github/marioponceg/conduit/ConduitClient;
+}
+
 public abstract interface class io/github/marioponceg/conduit/engine/ConduitEngine {
 	public abstract fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
