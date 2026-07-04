@@ -1,5 +1,6 @@
 package io.github.marioponceg.conduit
 
+import io.github.marioponceg.conduit.converter.BodyConverter
 import io.github.marioponceg.conduit.engine.ConduitEngine
 import io.github.marioponceg.conduit.interceptor.ConduitInterceptor
 
@@ -26,6 +27,9 @@ public class ConduitBuilder internal constructor() {
     /** Base URL that requests with relative URLs are resolved against. */
     public var baseUrl: String? = null
 
+    /** Converter used by the typed `execute<T>` extensions; optional for raw usage. */
+    public var converter: BodyConverter? = null
+
     /** Interceptors, run in list order around the engine. */
     public val interceptors: MutableList<ConduitInterceptor> = mutableListOf()
 
@@ -33,6 +37,11 @@ public class ConduitBuilder internal constructor() {
         val engine = checkNotNull(engine) {
             "Conduit needs an engine: set `engine = ...` (e.g. OkHttpEngine from conduit-engine-okhttp)"
         }
-        return ConduitClient(engine = engine, baseUrl = baseUrl, interceptors = interceptors.toList())
+        return ConduitClient(
+            engine = engine,
+            baseUrl = baseUrl,
+            interceptors = interceptors.toList(),
+            converter = converter,
+        )
     }
 }

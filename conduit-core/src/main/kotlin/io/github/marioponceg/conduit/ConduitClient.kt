@@ -1,5 +1,6 @@
 package io.github.marioponceg.conduit
 
+import io.github.marioponceg.conduit.converter.BodyConverter
 import io.github.marioponceg.conduit.engine.ConduitEngine
 import io.github.marioponceg.conduit.http.HttpRequest
 import io.github.marioponceg.conduit.http.HttpResponse
@@ -13,6 +14,7 @@ public class ConduitClient internal constructor(
     engine: ConduitEngine,
     private val baseUrl: String?,
     interceptors: List<ConduitInterceptor>,
+    @PublishedApi internal val converter: BodyConverter?,
 ) {
 
     private val pipeline: ConduitEngine = InterceptorPipeline(interceptors, engine)

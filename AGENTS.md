@@ -47,7 +47,10 @@ Any design decision **not** listed above must be raised with the maintainer befo
   is itself a `ConduitEngine` decorator, so it composes), and the entry point (`conduit { }` DSL
   building a `ConduitClient` that resolves `baseUrl`, runs the pipeline, and maps the raw outcome
   to `ConduitResult` — the single place where that mapping happens; `CancellationException`
-  always propagates, never becomes a `Failure`). Its only dependency is `kotlinx-coroutines-core`
+  always propagates, never becomes a `Failure`), plus the `BodyConverter` seam
+  (`…conduit.converter`) and the reified `execute<T>` / `execute<T, B>` extensions that decode
+  and encode typed bodies through it (decode/encode failures → `Failure.Serialization`;
+  `execute<Unit>` needs no converter). Its only dependency is `kotlinx-coroutines-core`
   (KMP-friendly, required by the coroutines-first design). Library tooling applied: explicit API
   mode, Kover, Binary Compatibility Validator, Dokka.
 - `conduit-engine-okhttp` — the default [ConduitEngine]: OkHttp (stable 4.x line) bridged into a
@@ -55,6 +58,10 @@ Any design decision **not** listed above must be raised with the maintainer befo
   dependency so consumers can declare this single artifact. Settled 2026-07-04: the engine lives
   outside core so core stays physically dependency-free and the engine seam is the real KMP
   boundary.
+- `conduit-serialization-kotlinx` — the default `BodyConverter`: kotlinx.serialization JSON.
+  Same boundary rationale as the engine: core defines the converter seam, format libraries stay
+  in their own modules (a Moshi/Jackson converter would be a sibling module). Exposes core and
+  `kotlinx-serialization-json` as `api` dependencies.
 - **Engine contract is raw by design**: engines return the `HttpResponse` for any status code and
   throw only `IOException` / `CancellationException`; the mapping to `ConduitResult` happens once,
   in core — never inside an engine.
@@ -119,8 +126,8 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping |
-| Next PRs (one design unit each) | Serialization/converters (brings `Failure.Serialization` into play); retry policies as interceptors |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping (#9), `BodyConverter` seam + `conduit-serialization-kotlinx` |
+| Next PRs (one design unit each) | Retry policies as interceptors; typed verb sugar (`get<T>` / `post<T>`) if it earns its keep |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw

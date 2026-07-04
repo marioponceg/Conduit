@@ -1,17 +1,31 @@
 public final class io/github/marioponceg/conduit/ConduitBuilder {
 	public final fun getBaseUrl ()Ljava/lang/String;
+	public final fun getConverter ()Lio/github/marioponceg/conduit/converter/BodyConverter;
 	public final fun getEngine ()Lio/github/marioponceg/conduit/engine/ConduitEngine;
 	public final fun getInterceptors ()Ljava/util/List;
 	public final fun setBaseUrl (Ljava/lang/String;)V
+	public final fun setConverter (Lio/github/marioponceg/conduit/converter/BodyConverter;)V
 	public final fun setEngine (Lio/github/marioponceg/conduit/engine/ConduitEngine;)V
 }
 
 public final class io/github/marioponceg/conduit/ConduitClient {
 	public final fun execute (Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getConverter ()Lio/github/marioponceg/conduit/converter/BodyConverter;
 }
 
 public final class io/github/marioponceg/conduit/ConduitKt {
 	public static final fun conduit (Lkotlin/jvm/functions/Function1;)Lio/github/marioponceg/conduit/ConduitClient;
+}
+
+public final class io/github/marioponceg/conduit/TypedExecuteKt {
+	public static final fun executeTyped (Lio/github/marioponceg/conduit/ConduitClient;Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/reflect/KType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun executeTypedWithBody (Lio/github/marioponceg/conduit/ConduitClient;Lio/github/marioponceg/conduit/http/HttpRequest;Lkotlin/reflect/KType;Ljava/lang/Object;Lkotlin/reflect/KType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/marioponceg/conduit/converter/BodyConverter {
+	public abstract fun decode ([BLkotlin/reflect/KType;)Ljava/lang/Object;
+	public abstract fun encode (Ljava/lang/Object;Lkotlin/reflect/KType;)[B
+	public abstract fun getContentType ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/marioponceg/conduit/engine/ConduitEngine {
@@ -23,6 +37,7 @@ public final class io/github/marioponceg/conduit/http/Headers {
 	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun get (Ljava/lang/String;)Ljava/lang/String;
 	public final fun names ()Ljava/util/Set;
+	public final fun plus (Lkotlin/Pair;)Lio/github/marioponceg/conduit/http/Headers;
 	public final fun values (Ljava/lang/String;)Ljava/util/List;
 }
 

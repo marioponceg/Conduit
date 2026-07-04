@@ -1,0 +1,9 @@
+public final class io/github/marioponceg/conduit/serialization/kotlinx/KotlinxJsonConverter : io/github/marioponceg/conduit/converter/BodyConverter {
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun decode ([BLkotlin/reflect/KType;)Ljava/lang/Object;
+	public fun encode (Ljava/lang/Object;Lkotlin/reflect/KType;)[B
+	public fun getContentType ()Ljava/lang/String;
+}
+
