@@ -44,10 +44,12 @@ Any design decision **not** listed above must be raised with the maintainer befo
   type (`…conduit.result`), the engine-agnostic HTTP models (`…conduit.http`), the
   `ConduitEngine` interface (`…conduit.engine`), and the interceptor pipeline
   (`…conduit.interceptor`: suspend chain-of-responsibility at the raw engine level; the pipeline
-  is itself a `ConduitEngine` decorator, so it composes). The DSL lands in a later PR. Its only
-  dependency is `kotlinx-coroutines-core` (KMP-friendly, required by the coroutines-first
-  design). Library tooling applied: explicit API mode, Kover, Binary Compatibility Validator,
-  Dokka.
+  is itself a `ConduitEngine` decorator, so it composes), and the entry point (`conduit { }` DSL
+  building a `ConduitClient` that resolves `baseUrl`, runs the pipeline, and maps the raw outcome
+  to `ConduitResult` — the single place where that mapping happens; `CancellationException`
+  always propagates, never becomes a `Failure`). Its only dependency is `kotlinx-coroutines-core`
+  (KMP-friendly, required by the coroutines-first design). Library tooling applied: explicit API
+  mode, Kover, Binary Compatibility Validator, Dokka.
 - `conduit-engine-okhttp` — the default [ConduitEngine]: OkHttp (stable 4.x line) bridged into a
   suspend call over `Call.enqueue` with structured cancellation. Exposes core as an `api`
   dependency so consumers can declare this single artifact. Settled 2026-07-04: the engine lives
@@ -117,8 +119,8 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline |
-| Next PRs (one design unit each) | Configuration DSL + client entry point; error mapping into `ConduitResult`; retry policies as interceptors |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping |
+| Next PRs (one design unit each) | Serialization/converters (brings `Failure.Serialization` into play); retry policies as interceptors |
 | Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
