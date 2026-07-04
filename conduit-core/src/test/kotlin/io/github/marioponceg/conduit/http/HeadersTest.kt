@@ -27,6 +27,14 @@ class HeadersTest {
     }
 
     @Test
+    fun `plus appends a header preserving the existing ones`() {
+        val headers = Headers.of("Accept" to "application/json") + ("X-Trace" to "abc")
+
+        assertEquals("application/json", headers["Accept"])
+        assertEquals("abc", headers["X-Trace"])
+    }
+
+    @Test
     fun `of accepts a list of pairs preserving order`() {
         val headers = Headers.of(listOf("Set-Cookie" to "a=1", "Set-Cookie" to "b=2"))
 

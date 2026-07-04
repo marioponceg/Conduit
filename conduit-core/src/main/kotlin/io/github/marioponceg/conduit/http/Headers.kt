@@ -20,6 +20,9 @@ public class Headers private constructor(
     public fun names(): Set<String> =
         entries.map { it.first }.distinctBy { it.lowercase() }.toSet()
 
+    /** Returns a copy with [header] appended after the existing entries. */
+    public operator fun plus(header: Pair<String, String>): Headers = Headers(entries + header)
+
     public companion object {
         /** Creates headers from name-value [pairs], keeping their order. */
         public fun of(vararg pairs: Pair<String, String>): Headers = Headers(pairs.toList())
