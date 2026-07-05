@@ -114,12 +114,21 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 ## Releases, versioning & publishing
 
-- **Versioning**: SemVer. Releases are annotated tags on `main` (`vX.Y.Z`); a tag push will
-  trigger the release workflow (to be added before `v0.1.0`).
-- **Publishing target: Maven Central** under the `io.github.marioponceg` namespace
-  (e.g. `io.github.marioponceg:conduit-core`), using the `com.vanniktech.maven.publish` plugin
-  and the Central Portal, with GPG-signed artifacts. Implement the publishing setup and the
-  tag-triggered release workflow when a minimal publishable API exists — not before.
+- **Versioning**: SemVer. `VERSION_NAME` in the root `gradle.properties` is the source of truth;
+  releases are tags on `main` (`vX.Y.Z`) and the release workflow
+  (`.github/workflows/release.yml`) refuses to publish if the tag does not match `VERSION_NAME`.
+- **Publishing: Maven Central** under the `io.github.marioponceg` namespace via the
+  `com.vanniktech.maven.publish` plugin (applied through the `conduit.library` convention) and
+  the Central Portal. Shared POM metadata lives in the root `gradle.properties`; each module's
+  `gradle.properties` sets `POM_ARTIFACT_ID` / `POM_NAME` / `POM_DESCRIPTION`.
+- **Signing**: artifacts are GPG-signed only when the in-memory key is present
+  (`signingInMemoryKey`), so `publishToMavenLocal` works without keys. The release workflow needs
+  four repo secrets: `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD` (Central Portal token),
+  `SIGNING_KEY` (ASCII-armored private key), `SIGNING_KEY_PASSWORD`.
+- **Release flow**: bump `VERSION_NAME` via PR → push tag `vX.Y.Z` → workflow verifies
+  (build + detekt + apiCheck + koverVerify) and uploads signed artifacts to the Central Portal →
+  **manual release** from central.sonatype.com (deliberate: Maven Central publications are
+  irreversible).
 - **Consumption during development** (design-system library, sample app): via Gradle composite
   builds (`includeBuild`) or `mavenLocal` — no published artifact is required to start consuming
   Conduit from sibling repos.
@@ -128,9 +137,8 @@ Any design decision **not** listed above must be raised with the maintainer befo
 
 | When | What |
 |---|---|
-| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping (#9), `BodyConverter` seam + `conduit-serialization-kotlinx` (#10), `RetryInterceptor` |
-| Next PRs (one design unit each) | Typed verb sugar (`get<T>` / `post<T>`) if it earns its keep; README usage docs |
-| Before `v0.1.0` | Maven Central publishing setup + tag-triggered release workflow |
+| Already in place | CI (build + test + detekt + `koverVerify` + `apiCheck` + Codecov upload), AGENTS.md, version catalog, `main` ruleset, `conduit-core` with tooling (#2), `ConduitResult` (#3), engine interface + HTTP models (#5), `build-logic` convention plugin (#6), `conduit-engine-okhttp` (#7), interceptor pipeline (#8), `conduit { }` DSL + client with error mapping (#9), `BodyConverter` seam + `conduit-serialization-kotlinx` (#10), `RetryInterceptor` (#11), typed verbs (#12), README (#13), `HttpRequest.copy` (#14), Maven Central publishing + tag-triggered release workflow |
+| After `v0.1.0` | Sample/consumer projects (design-system library, sample app) in sibling repos; possible future units: streaming bodies, Moshi converter, KMP migration of core |
 
 - **Coverage tool is Kover** (JetBrains' official Kotlin coverage plugin — preferred over raw
   JaCoCo, which miscounts inline functions and coroutine bodies). CI uploads the Kover XML report

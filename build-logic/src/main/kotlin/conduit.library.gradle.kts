@@ -10,6 +10,18 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.kotlinx.kover")
     id("org.jetbrains.dokka")
+    id("com.vanniktech.maven.publish")
+}
+
+mavenPublishing {
+    // Uploads to the Central Portal; actual publication is released manually from
+    // central.sonatype.com (publishing to Maven Central is irreversible by design).
+    publishToMavenCentral()
+    // Signing is mandatory for Maven Central but must not block local publishToMavenLocal:
+    // sign only when the in-memory key is present (always true in the release workflow).
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        signAllPublications()
+    }
 }
 
 val libs = the<LibrariesForLibs>()
