@@ -41,8 +41,10 @@ jobs:
 
       # Uploads signed artifacts to the Central Portal as a deployment awaiting manual
       # release from central.sonatype.com (publishing to Maven Central is irreversible).
+      # --no-configuration-cache: publishing releases to Maven Central is not yet
+      # compatible with the configuration cache (gradle/gradle#22779).
       - name: Upload to Maven Central Portal
-        run: ./gradlew publishToMavenCentral
+        run: ./gradlew publishToMavenCentral --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
