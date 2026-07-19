@@ -48,10 +48,16 @@ when (val result = client.get<List<User>>("/users")) {
 
 Declaring the engine and converter modules is enough — both expose `conduit-core` transitively.
 
-> Maven Central publishing is on the way for `v0.1.0` under the `io.github.marioponceg`
-> namespace. Until then, consume Conduit via a Gradle
-> [composite build](https://docs.gradle.org/current/userguide/composite_builds.html)
-> (`includeBuild`) or `mavenLocal`.
+## Installation
+
+Conduit is published on Maven Central:
+
+```kotlin
+dependencies {
+    implementation("io.github.marioponceg:conduit-engine-okhttp:0.1.0")
+    implementation("io.github.marioponceg:conduit-serialization-kotlinx:0.1.0")
+}
+```
 
 ## Making requests
 
