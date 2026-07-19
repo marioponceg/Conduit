@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/marioponceg/Conduit/actions/workflows/ci.yml/badge.svg)](https://github.com/marioponceg/Conduit/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/marioponceg/Conduit/branch/main/graph/badge.svg)](https://codecov.io/gh/marioponceg/Conduit)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.marioponceg/conduit-core)](https://central.sonatype.com/artifact/io.github.marioponceg/conduit-core)
 
 Lightweight, coroutine-first networking library for Android and the JVM, built on OkHttp with
 typed error handling, request/response interceptors and built-in retry policies.
@@ -47,10 +48,16 @@ when (val result = client.get<List<User>>("/users")) {
 
 Declaring the engine and converter modules is enough — both expose `conduit-core` transitively.
 
-> Maven Central publishing is on the way for `v0.1.0` under the `io.github.marioponceg`
-> namespace. Until then, consume Conduit via a Gradle
-> [composite build](https://docs.gradle.org/current/userguide/composite_builds.html)
-> (`includeBuild`) or `mavenLocal`.
+## Installation
+
+Conduit is published on Maven Central:
+
+```kotlin
+dependencies {
+    implementation("io.github.marioponceg:conduit-engine-okhttp:0.1.0")
+    implementation("io.github.marioponceg:conduit-serialization-kotlinx:0.1.0")
+}
+```
 
 ## Making requests
 
